@@ -1,19 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './index.scss';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { initializeApp } from 'firebase/app';
+import { Provider } from 'react-redux';
+import store from './store';
+import { BrowserRouter } from 'react-router-dom';
+import { getFirestore } from 'firebase/firestore';
+const firebaseConfig = {
+    apiKey: 'AIzaSyBelZAGDWvPK16-vyBQLj7zW86udxx3Ewg',
+    authDomain: 'color-game-b5d44.firebaseapp.com',
+    databaseURL:
+        'https://color-game-b5d44-default-rtdb.europe-west1.firebasedatabase.app',
+    projectId: 'color-game-b5d44',
+    storageBucket: 'color-game-b5d44.appspot.com',
+    messagingSenderId: '278077859406',
+    appId: '1:278077859406:web:3a138c2b87d985ecac051f',
+};
+
+export const firebaseApp = initializeApp(firebaseConfig);
+export const fireStoreBase = getFirestore(firebaseApp);
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <Provider store={store}>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </Provider>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();

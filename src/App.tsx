@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { ref, getDatabase, set } from 'firebase/database';
+import { useList, useObjectVal } from 'react-firebase-hooks/database';
+import { firebaseApp } from '.';
+import Game from './components/game/Game';
+import Content from './components/content/Content';
+import { useAppDispatch, useAppSelector } from './hooks/react-redux';
+import { removePlayerFromLobby } from './store/gameReducer';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const userID = useAppSelector(
+        (state) => state.gameReducer.user.info?.userID
+    );
+    const dispatch = useAppDispatch();
+    useEffect(() => {
+        window.addEventListener('unload', handleTabClosing);
+        return () => {
+            window.removeEventListener('unload', handleTabClosing);
+        };
+    });
+
+    const handleTabClosing = () => {
+        if (userID) {
+            dispatch(removePlayerFromLobby(userID));
+        }
+    };
+
+    return (
+        <>
+            <Content />
+        </>
+    );
 }
 
 export default App;
