@@ -72,7 +72,7 @@ const Lobby: React.FC = (props) => {
         const players = serverLobby?.map((i) => i.val()) as IUser[];
         const playersCount = players.filter((i) => i.isInLobby).length;
         const readyPlayersCount = players.filter((i) => i.isReady).length;
-        if (playersCount !== 0) {
+        if (playersCount > 1) {
             return playersCount === readyPlayersCount;
         }
         return false;
