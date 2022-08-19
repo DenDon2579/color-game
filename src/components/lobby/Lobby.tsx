@@ -68,7 +68,16 @@ const Lobby: React.FC = (props) => {
         }
     };
 
-    console.log(user?.isReady);
+    const isAllReady = () => {
+        const players = serverLobby?.map((i) => i.val()) as IUser[];
+        const playersCount = players.filter((i) => i.isInLobby).length;
+        const readyPlayersCount = players.filter((i) => i.isReady).length;
+        if (playersCount !== 0) {
+            return playersCount === readyPlayersCount;
+        }
+        return false;
+    };
+
     return (
         <div className={classes.lobby}>
             <div className={classes.header}>
@@ -91,6 +100,7 @@ const Lobby: React.FC = (props) => {
                     Присоединиться к лобби
                 </button>
             )}
+            {isAllReady() ? <h2>da</h2> : <h2>net</h2>}
         </div>
     );
 };
