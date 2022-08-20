@@ -25,11 +25,11 @@ export const useLobby = () => {
                 });
                 if (emptyIndex !== -1 && isAlreadyInLobby === -1) {
                     tempLobby[emptyIndex] = tempUser;
-                    setServerLobby(tempLobby).then(() => {
-                        dispatch(setIsInLobbyStatus(true));
-                        dispatch(setReadyStatus(false));
-                    });
                 }
+                setServerLobby(tempLobby).then(() => {
+                    dispatch(setIsInLobbyStatus(true));
+                    dispatch(setReadyStatus(false));
+                });
             }
         },
         leave() {
