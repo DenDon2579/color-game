@@ -7,7 +7,7 @@ import Login from '../login/Login';
 import classes from './Content.module.scss';
 
 const Content: React.FC = () => {
-    const isAuth = useAppSelector((state) => state.gameReducer.user.isAuth);
+    const isAuth = useAppSelector((state) => state.userReducer.isAuth);
     return (
         <div className={classes.content}>
             <Routes>

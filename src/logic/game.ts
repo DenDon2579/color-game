@@ -1,143 +1,25 @@
-import { getDatabase, ref, set } from 'firebase/database';
-import { firebaseApp } from '..';
+import { ref, set } from 'firebase/database';
+
+import { database } from '../firestore';
+import { IBoard, ICell } from '../types/board';
 
 export function initBoard() {
-    const cells = [];
+    const cells: IBoard = [];
     for (let y = 0; y < 10; y++) {
-        const row = [];
+        const row: ICell[] = [];
         for (let x = 0; x < 10; x++) {
             row.push({
                 ownerId: '',
                 ownerPhoto: '',
                 coords: { x, y },
+                changeable: false,
             });
         }
         cells.push(row);
     }
-    const database = getDatabase(firebaseApp);
+
     set(ref(database, 'cells'), cells);
     return cells;
 }
 
-//  [
-//     [
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//     ],
-//     [
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//     ],
-//     [
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//     ],
-//     [
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//     ],
-//     [
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//     ],
-//     [
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//     ],
-//     [
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//     ],
-//     [
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//     ],
-//     [
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//     ],
-//     [
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//         { ownerId: null, ownerPhoto: null, coords: { x: 0, y: 0 } },
-//     ],
-// ];
+//

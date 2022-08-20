@@ -10,7 +10,14 @@ const Board: React.FC<IProps> = () => {
     const board = useAppSelector((state) => state.gameReducer.board);
     return (
         <div className={classes.board}>
-            {board?.map((row) => row.map((cell) => <Cell cell={cell} />))}
+            {board?.map((row) =>
+                row.map((cell) => (
+                    <Cell
+                        cell={cell}
+                        key={(cell.coords.x + cell.coords.y).toString()}
+                    />
+                ))
+            )}
         </div>
     );
 };

@@ -1,8 +1,9 @@
-import { getDatabase, ref } from 'firebase/database';
+import { ref } from 'firebase/database';
 import React, { useEffect } from 'react';
 import { useList } from 'react-firebase-hooks/database';
-import { firebaseApp } from '../..';
-import { useAppDispatch, useAppSelector } from '../../hooks/react-redux';
+
+import { database } from '../../firestore';
+import { useAppDispatch } from '../../hooks/react-redux';
 import { initBoard } from '../../logic/game';
 import { setBoard } from '../../store/gameReducer';
 import { IBoard } from '../../types/board';
@@ -12,12 +13,12 @@ import classes from './Game.module.scss';
 const Game: React.FC = () => {
     const dispatch = useAppDispatch();
 
-    const database = getDatabase(firebaseApp);
     const [snapshots, loading, error] = useList(ref(database, 'cells'));
-    const serverBoard = snapshots?.map((i) => i.val());
+
     useEffect(() => {
+        const serverBoard = snapshots?.map((i) => i.val());
         dispatch(setBoard(serverBoard as IBoard));
-    }, [serverBoard, dispatch]);
+    }, [dispatch]);
 
     function newGame() {
         initBoard();

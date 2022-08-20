@@ -1,7 +1,8 @@
 import React from 'react';
 import { useAppDispatch } from '../../hooks/react-redux';
 import useAuth from '../../hooks/useAuth';
-import { signIn } from '../../store/gameReducer';
+import { signIn } from '../../store/userReducer';
+
 import classes from './Login.module.scss';
 
 const Login: React.FC = () => {
