@@ -13,13 +13,17 @@ export const useLobby = () => {
     const methods = {
         join() {
             if (user && lobby) {
-                const tempLobby = [...lobby];
+                const tempLobby = [...lobby] as TLobby;
                 const tempUser = { ...user };
                 tempUser.isInLobby = true;
                 tempUser.isReady = false;
                 const emptyIndex = tempLobby.findIndex((i) => i === '');
-
-                if (emptyIndex !== -1) {
+                const isAlreadyInLobby = tempLobby.findIndex((i) => {
+                    if (i) {
+                        return i.userID === user.userID;
+                    }
+                });
+                if (emptyIndex !== -1 && isAlreadyInLobby === -1) {
                     tempLobby[emptyIndex] = tempUser;
                 }
                 setServerLobby(tempLobby).then(() => {

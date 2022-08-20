@@ -3,7 +3,7 @@ import classes from './Lobby.module.scss';
 
 import { IUser } from '../../types/user';
 import { useAppSelector } from '../../hooks/react-redux';
-import { ref } from 'firebase/database';
+import { ref, remove, set } from 'firebase/database';
 import { useList } from 'react-firebase-hooks/database';
 
 import PlayerList from './PlayerList';
@@ -55,6 +55,7 @@ const Lobby: React.FC = (props) => {
                 <span>Лобби</span>
             </div>
             <PlayerList />
+
             {user?.isInLobby ? (
                 <>
                     <button className={classes.button} onClick={leaveLobby}>
@@ -72,6 +73,11 @@ const Lobby: React.FC = (props) => {
                 </button>
             )}
             {isAllReady() && <Navigate to='../game' />}
+            <button
+                onClick={() => set(ref(database, 'lobby'), ['', '', '', ''])}
+            >
+                asd
+            </button>
         </div>
     );
 };
