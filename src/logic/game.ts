@@ -5,10 +5,10 @@ import { IGameInfo } from '../types/game';
 
 import { TLobby } from '../types/lobby';
 import { IPlayerInfo } from '../types/player';
-import { Board } from './Board';
-import { Player } from './Player';
+import { Board } from './board';
+import { Player } from './player';
 
-export default class Game {
+export class Game {
     info: IGameInfo;
     players: Player[];
     board: Board | null;
@@ -29,11 +29,28 @@ export default class Game {
         };
     }
 
-    grabCell(position: IPosition) {
+    grabCell(position: IPosition): boolean {
+        const { x, y } = position;
         if (this.info.turn !== '') {
-            const ownerInfo = this.players[this.info.turn].getInfo();
-            this.board?.grabCell(ownerInfo, position);
+            const movingPlayerInfo = this.players[this.info.turn].getInfo();
+            const cells = this.board?.getInfo();
+            if (
+                cells?.[y]?.[x]?.changeable &&
+                cells?.[y]?.[x]?.ownerCode !== movingPlayerInfo.playerCode &&
+                (cells?.[y + 1]?.[x]?.ownerCode ===
+                    movingPlayerInfo.playerCode ||
+                    cells?.[y]?.[x + 1]?.ownerCode ===
+                        movingPlayerInfo.playerCode ||
+                    cells?.[y - 1]?.[x]?.ownerCode ===
+                        movingPlayerInfo.playerCode ||
+                    cells?.[y]?.[x - 1]?.ownerCode ===
+                        movingPlayerInfo.playerCode)
+            ) {
+                this.board?.grabCell(movingPlayerInfo, position);
+                return true;
+            }
         }
+        return false;
     }
 
     setInfo(gameInfo: IGameInfo) {

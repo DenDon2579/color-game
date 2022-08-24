@@ -11,15 +11,19 @@ import { TLobby } from '../../types/lobby';
 import { Navigate } from 'react-router-dom';
 import { database } from '../../firestore';
 import { useLobby } from '../../hooks/lobby-hooks';
-import { setClientLobby } from '../../store/lobbyReducer';
+import lobbyReducer, { setClientLobby } from '../../store/lobbyReducer';
 import { useDispatch } from 'react-redux';
 import { useGame } from '../../hooks/game-hooks';
 
 const Lobby: React.FC = (props) => {
     const dispatch = useDispatch();
     const user = useAppSelector((state) => state.userReducer.info);
+    const usersInLobby = useAppSelector((state) => state.lobbyReducer.lobby);
+    const isGameStarted = useAppSelector(
+        (state) => state.gameReducer.game?.isPlaying
+    );
     const lobby = useLobby();
-    const [serverLobby, loading] = useList(ref(database, 'lobby'));
+
     const joinLobby = () => {
         lobby.join();
     };
@@ -28,59 +32,66 @@ const Lobby: React.FC = (props) => {
         lobby.leave();
     };
 
-    useEffect(() => {
-        if (!loading) {
-            const players = serverLobby?.map((i) => i.val());
-            dispatch(setClientLobby(players as TLobby));
-        }
-    }, [serverLobby, dispatch, loading]);
-
     const toggleStatus = () => {
         lobby.toggleReady();
     };
 
     const isAllReady = () => {
-        const players = serverLobby?.map((i) => i.val()) as IUser[];
-        const playersCount = players.filter((i) => i.isInLobby).length;
-        const readyPlayersCount = players.filter((i) => i.isReady).length;
+        if (usersInLobby && user?.isInLobby) {
+            const playersCount = usersInLobby.filter((i) =>
+                i !== '' ? i.isInLobby : false
+            ).length;
+            const readyPlayersCount = usersInLobby.filter((i) =>
+                i !== '' ? i.isReady : false
+            ).length;
 
-        if (playersCount > 1) {
-            return playersCount === readyPlayersCount;
+            if (playersCount > 1) {
+                return playersCount === readyPlayersCount;
+            }
         }
         return false;
     };
 
-    return (
-        <div className={classes.lobby}>
-            <div className={classes.header}>
-                <span>Лобби</span>
-            </div>
-            <PlayerList />
+    if (!isGameStarted) {
+        return (
+            <div className={classes.lobby}>
+                <div className={classes.header}>
+                    <span>Лобби</span>
+                </div>
+                <PlayerList />
 
-            {user?.isInLobby ? (
-                <>
-                    <button className={classes.button} onClick={leaveLobby}>
-                        Покинуть лобби
+                {user?.isInLobby ? (
+                    <>
+                        <button className={classes.button} onClick={leaveLobby}>
+                            Покинуть лобби
+                        </button>
+                        <button
+                            className={classes.button}
+                            onClick={toggleStatus}
+                        >
+                            {user?.isReady
+                                ? 'Перестать готовиться'
+                                : 'Приготовиться'}
+                        </button>
+                    </>
+                ) : (
+                    <button className={classes.button} onClick={joinLobby}>
+                        Присоединиться к лобби
                     </button>
-                    <button className={classes.button} onClick={toggleStatus}>
-                        {user?.isReady
-                            ? 'Перестать готовиться'
-                            : 'Приготовиться'}
-                    </button>
-                </>
-            ) : (
-                <button className={classes.button} onClick={joinLobby}>
-                    Присоединиться к лобби
+                )}
+                {isAllReady() && <Navigate to='../game' />}
+                <button
+                    className={classes.button}
+                    onClick={() =>
+                        set(ref(database, 'lobby'), ['', '', '', ''])
+                    }
+                >
+                    Remove all
                 </button>
-            )}
-            {isAllReady() && <Navigate to='../game' />}
-            <button
-                className={classes.button}
-                onClick={() => set(ref(database, 'lobby'), ['', '', '', ''])}
-            >
-                Remove all
-            </button>
-        </div>
-    );
+            </div>
+        );
+    } else {
+        return <h2>ИГРА УЖЕ ИДЁТ</h2>;
+    }
 };
 export default Lobby;

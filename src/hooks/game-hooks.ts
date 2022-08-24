@@ -1,7 +1,7 @@
 import { ref, set } from 'firebase/database';
 import { Timestamp } from 'firebase/firestore';
 import { database } from '../firestore';
-import Game from '../logic/game';
+import { Game } from '../logic/game';
 import {
     setClientBoard,
     setClientGame,
@@ -43,9 +43,11 @@ export const useGame = () => {
         },
 
         grabCell(position: IPosition) {
-            game.grabCell(position);
-            setServerBoardInfo(game.getBoardInfo());
-            nextTurn();
+            const isSuccessful = game.grabCell(position);
+            if (isSuccessful) {
+                setServerBoardInfo(game.getBoardInfo());
+                nextTurn();
+            }
         },
 
         setClientGameInfo(gameInfo: IGameInfo) {
