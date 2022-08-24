@@ -1,7 +1,7 @@
 import { ref, set } from 'firebase/database';
 import { Timestamp } from 'firebase/firestore';
 import { database } from '../firestore';
-import Game from '../logic/Game';
+import Game from '../logic/game';
 import {
     setClientBoard,
     setClientGame,
