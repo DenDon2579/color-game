@@ -1,7 +1,7 @@
 import { ref, set } from 'firebase/database';
 import { Timestamp } from 'firebase/firestore';
 import { database } from '../firestore';
-import { GameClass } from '../logic/Game';
+import Game from '../logic/Game';
 import {
     setClientBoard,
     setClientGame,
@@ -14,7 +14,7 @@ import { IGameInfo } from '../types/game';
 import { IPlayerInfo } from '../types/player';
 import { useAppDispatch, useAppSelector } from './react-redux';
 
-const game = new GameClass();
+const game = new Game();
 
 export const useGame = () => {
     const dispatch = useAppDispatch();
