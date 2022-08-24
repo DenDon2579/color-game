@@ -1,16 +1,29 @@
 import React from 'react';
 
-import { ICell } from '../../types/board';
+import { ICellInfo, IPosition } from '../../types/cell';
 import classes from './Cell.module.scss';
 
 interface IProps {
-    cell: ICell;
+    cell: ICellInfo;
+    grabCell: (position: IPosition) => void;
 }
 
-const Cell: React.FC<IProps> = ({ cell }) => {
+const Cell: React.FC<IProps> = ({ cell, grabCell }) => {
+    const color = cell.color;
+    let style = {};
+    if (cell.color) {
+        style = {
+            background: color,
+            boxShadow: `0px 0px 10px ${color}, 0px 0px 15px ${color}`,
+        };
+    }
     return (
-        <div className={classes.cell}>
-            {cell.coords.x}:{cell.coords.y}
+        <div
+            onClick={() => grabCell(cell.position)}
+            className={classes.cell}
+            style={style}
+        >
+            {cell.photoURL && <img src={cell.photoURL} alt='' />}
         </div>
     );
 };

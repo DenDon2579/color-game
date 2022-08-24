@@ -1,7 +1,7 @@
 export interface IUser {
-    userID: string | null;
-    displayName: string | null;
-    photoURL: string | null;
+    userID: string;
+    displayName: string;
+    photoURL: string;
     isReady: boolean;
     isInLobby: boolean;
 }

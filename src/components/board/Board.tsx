@@ -1,6 +1,8 @@
 import React from 'react';
+import { useGame } from '../../hooks/game-hooks';
 import { useAppSelector } from '../../hooks/react-redux';
-import { IBoard } from '../../types/board';
+import gameReducer from '../../store/gameReducer';
+
 import Cell from '../cell/Cell';
 import classes from './Board.module.scss';
 
@@ -8,13 +10,29 @@ interface IProps {}
 
 const Board: React.FC<IProps> = () => {
     const board = useAppSelector((state) => state.gameReducer.board);
+    const turn = useAppSelector((state) => state.gameReducer.game?.turn);
+    const players = useAppSelector((state) => state.gameReducer.players);
+    const currentUserID = useAppSelector(
+        (state) => state.userReducer.info?.userID
+    );
+    const myCode = players.find(
+        (player) => player.userID === currentUserID
+    )?.playerCode;
+    const isMyTurn = myCode === turn;
+
+    const game = useGame();
+
     return (
-        <div className={classes.board}>
+        <div
+            className={classes.board}
+            style={{ pointerEvents: isMyTurn ? 'all' : 'none' }}
+        >
             {board?.map((row) =>
                 row.map((cell) => (
                     <Cell
+                        grabCell={game.grabCell}
                         cell={cell}
-                        key={(cell.coords.x + cell.coords.y).toString()}
+                        key={(cell.position.x + cell.position.y).toString()}
                     />
                 ))
             )}

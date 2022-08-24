@@ -23,6 +23,7 @@ export const useLobby = () => {
                         return i.userID === user.userID;
                     }
                 });
+
                 if (emptyIndex !== -1 && isAlreadyInLobby === -1) {
                     tempLobby[emptyIndex] = tempUser;
                 }
@@ -61,7 +62,6 @@ export const useLobby = () => {
                 }
                 return false;
             });
-            console.log(tempLobby[userIndex]);
 
             tempLobby[userIndex] = {
                 ...tempLobby[userIndex],

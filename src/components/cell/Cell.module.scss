@@ -1,8 +1,51 @@
 .cell {
     width: 70px;
     height: 70px;
-    border: 1px solid #000;
+    border: 1px solid #270082;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 15px;
+    margin: 5px;
+
+    background: #1a1a40;
+    box-shadow: 6px 6px 7px #171738, -6px -6px 7px #1d1d48;
+    transition: all 0.3s;
+    opacity: 1;
+    cursor: pointer;
+    img {
+        width: 35px;
+        border-radius: 15px;
+    }
+    animation: enter 1s;
 }
+
+.cell:hover {
+    transform: rotate(45deg) scale(0.65);
+    background: rgba(255, 255, 255, 0.144);
+}
+
+@keyframes enter {
+    0% {
+        transform: rotate(45deg) scale(0);
+        background: rgba(255, 255, 255, 0.144);
+    }
+    100% {
+        transform: rotate(0deg) scale(1);
+    }
+}
+
+//ЦВЕТА
+
+//ИГРОК 1 - #FA58B6
+
+//ИГРОК 2 - #ffee77
+
+//ИГРОК 3 - #1cd6ce
+
+//ИГРОК 4 - #e64848
+
+//ШАБЛОН
+
+//background: цвет;
+//box-shadow: 0px 0px 10px цвет, 0px 0px 15px цвет;

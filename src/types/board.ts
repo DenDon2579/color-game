@@ -1,12 +1,3 @@
-export type IBoard = ICell[][];
+import { ICellInfo } from './cell';
 
-export interface ICell {
-    ownerId: string | null;
-    ownerPhoto: string | null;
-
-    changeable: boolean;
-    coords: {
-        x: number;
-        y: number;
-    };
-}
+export type IBoardInfo = ICellInfo[][];

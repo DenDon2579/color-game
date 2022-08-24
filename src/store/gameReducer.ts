@@ -1,29 +1,42 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IBoard } from '../types/board';
+import { IBoardInfo } from '../types/board';
 import { TLobby } from '../types/lobby';
 import { IUser } from '../types/user';
 import { ref, set } from 'firebase/database';
 
 import { database } from '../firestore';
+import { IPlayerInfo } from '../types/player';
+import { IGameInfo } from '../types/game';
 
 interface IState {
-    board: IBoard;
+    board: IBoardInfo;
+    players: IPlayerInfo[];
+    game: IGameInfo | null;
 }
 
 const initialState: IState = {
     board: [],
+    players: [],
+    game: null,
 };
 
 const gameSlice = createSlice({
     name: 'game',
     initialState: initialState,
     reducers: {
-        setBoard(state, action: PayloadAction<IBoard>) {
+        setClientBoard(state, action: PayloadAction<IBoardInfo>) {
             state.board = action.payload;
+        },
+        setClientGame(state, action: PayloadAction<IGameInfo>) {
+            state.game = action.payload;
+        },
+        setClientPlayers(state, action: PayloadAction<IPlayerInfo[]>) {
+            state.players = action.payload;
         },
     },
 });
 
 export default gameSlice.reducer;
 
-export const { setBoard } = gameSlice.actions;
+export const { setClientBoard, setClientGame, setClientPlayers } =
+    gameSlice.actions;

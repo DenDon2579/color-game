@@ -13,6 +13,7 @@ import { database } from '../../firestore';
 import { useLobby } from '../../hooks/lobby-hooks';
 import { setClientLobby } from '../../store/lobbyReducer';
 import { useDispatch } from 'react-redux';
+import { useGame } from '../../hooks/game-hooks';
 
 const Lobby: React.FC = (props) => {
     const dispatch = useDispatch();
@@ -74,9 +75,10 @@ const Lobby: React.FC = (props) => {
             )}
             {isAllReady() && <Navigate to='../game' />}
             <button
+                className={classes.button}
                 onClick={() => set(ref(database, 'lobby'), ['', '', '', ''])}
             >
-                asd
+                Remove all
             </button>
         </div>
     );

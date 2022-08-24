@@ -12,8 +12,8 @@ const login = async (): Promise<IUser> => {
     const user = session.user;
     return {
         userID: user.uid,
-        displayName: user.displayName,
-        photoURL: user.photoURL,
+        displayName: user.displayName ? user.displayName : '',
+        photoURL: user.photoURL ? user.photoURL : '',
         isReady: false,
         isInLobby: false,
     };
