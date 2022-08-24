@@ -14,7 +14,7 @@ import { IGameInfo } from '../types/game';
 import { IPlayerInfo } from '../types/player';
 import { useAppDispatch, useAppSelector } from './react-redux';
 
-const game = new Game();
+const game = new GameClass();
 
 export const useGame = () => {
     const dispatch = useAppDispatch();
