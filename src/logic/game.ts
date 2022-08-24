@@ -8,7 +8,7 @@ import { IPlayerInfo } from '../types/player';
 import { Board } from './Board';
 import { Player } from './Player';
 
-export class Game {
+export class GameClass {
     info: IGameInfo;
     players: Player[];
     board: Board | null;
