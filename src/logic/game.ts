@@ -5,8 +5,8 @@ import { IGameInfo } from '../types/game';
 
 import { TLobby } from '../types/lobby';
 import { IPlayerInfo } from '../types/player';
-import { Board } from './board';
-import { Player } from './player';
+import { Board } from './Board';
+import { Player } from './Player';
 
 export class Game {
     info: IGameInfo;

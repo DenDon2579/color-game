@@ -1,7 +1,7 @@
 import { BASES_CORDS } from '../constants';
 import { ICellInfo, IPosition } from '../types/cell';
 import { IPlayerInfo } from '../types/player';
-import { Cell } from './cell';
+import { Cell } from './Cell';
 
 export class Board {
     cells: Cell[][] = [];
