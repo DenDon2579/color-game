@@ -41,8 +41,11 @@ const Game: React.FC = () => {
 
     useEffect(() => {
         if (!gameLoading && serverGame) {
-            const [isPlaying, turn] = serverGame.map((i) => i.val());
+            const [cellsCount, isPlaying, turn] = serverGame.map((i) =>
+                i.val()
+            );
             const gameInfo: IGameInfo = {
+                cellsCount,
                 isPlaying,
                 turn,
             };
@@ -58,7 +61,9 @@ const Game: React.FC = () => {
     }, [serverPlayers, dispatch, playersLoading]);
 
     useEffect(() => {
-        game.init();
+        if (!gameState.game?.isPlaying) {
+            game.init();
+        }
     }, []);
 
     return (
@@ -66,15 +71,41 @@ const Game: React.FC = () => {
             {isPlaying ? (
                 <>
                     <div className={classes.gameInfo}>
-                        <span>Ходит: {gameState.game?.turn}</span>
+                        <span>
+                            {'Ходит: ' +
+                                gameState.players.find(
+                                    (player) =>
+                                        player.playerCode ===
+                                        gameState.game?.turn
+                                )?.displayName}
+                        </span>
+
+                        <span>
+                            Осталось ячеек: {gameState.game?.cellsCount}
+                        </span>
                     </div>
                     <Board />
                     <div className={classes.playersInfo}></div>
                 </>
-            ) : isHost ? (
-                <button onClick={game.start}>Start</button>
             ) : (
-                <h2>Ожидание хоста</h2>
+                <div className={classes.preGameMessage}>
+                    {isHost ? (
+                        <>
+                            <span>
+                                Вы хост этой игры.
+                                <br /> Начинайте как будете готовы.
+                            </span>
+                            <button
+                                className={classes.button}
+                                onClick={game.start}
+                            >
+                                Начать игру
+                            </button>
+                        </>
+                    ) : (
+                        <span>Ожидание хоста</span>
+                    )}
+                </div>
             )}
         </div>
     );

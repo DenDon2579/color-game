@@ -17,6 +17,7 @@ export class Game {
         this.info = {
             isPlaying: false,
             turn: '',
+            cellsCount: 0,
         };
         this.board = null;
         this.players = [];
@@ -26,6 +27,7 @@ export class Game {
         this.info = {
             isPlaying: true,
             turn: 0,
+            cellsCount: this.getRandomCellsCount(),
         };
     }
 
@@ -47,6 +49,7 @@ export class Game {
                         movingPlayerInfo.playerCode)
             ) {
                 this.board?.grabCell(movingPlayerInfo, position);
+                this.info.cellsCount--;
                 return true;
             }
         }
@@ -91,6 +94,7 @@ export class Game {
             } else {
                 this.info.turn = 0;
             }
+            this.info.cellsCount = this.getRandomCellsCount();
         }
     }
 
@@ -126,4 +130,10 @@ export class Game {
     //         }
     //     });
     // }
+    getRandomCellsCount(): number {
+        const min = 1;
+        const max = 5;
+        const rand = min + Math.random() * (max + 1 - min);
+        return Math.floor(rand);
+    }
 }

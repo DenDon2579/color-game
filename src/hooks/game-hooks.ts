@@ -45,8 +45,12 @@ export const useGame = () => {
         grabCell(position: IPosition) {
             const isSuccessful = game.grabCell(position);
             if (isSuccessful) {
+                const cellsCount = game.getInfo().cellsCount;
                 setServerBoardInfo(game.getBoardInfo());
-                nextTurn();
+                if (cellsCount < 1) {
+                    nextTurn();
+                }
+                setServerGameInfo(game.getInfo());
             }
         },
 

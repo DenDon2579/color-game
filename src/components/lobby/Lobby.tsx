@@ -80,14 +80,14 @@ const Lobby: React.FC = (props) => {
                     </button>
                 )}
                 {isAllReady() && <Navigate to='../game' />}
-                {/* <button
+                <button
                     className={classes.button}
                     onClick={() =>
                         set(ref(database, 'lobby'), ['', '', '', ''])
                     }
                 >
                     Remove all
-                </button> */}
+                </button>
             </div>
         );
     } else {

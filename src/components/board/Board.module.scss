@@ -1,14 +1,22 @@
 .board {
+    width: auto;
+    height: auto;
     padding: 30px;
     box-sizing: content-box;
-    width: calc(80px * 10);
-    height: calc(80px * 10);
-    display: flex;
-    flex-wrap: wrap;
     overflow: hidden;
     box-shadow: inset 11px 11px 22px #161636, inset -11px -11px 22px #1e1e4a;
     border-radius: 20px;
     animation: enter 2s;
+    overflow: auto;
+}
+
+.cellsWrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(80px * 10);
+    height: calc(80px * 10);
 }
 
 @keyframes enter {

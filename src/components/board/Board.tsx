@@ -23,19 +23,24 @@ const Board: React.FC<IProps> = () => {
     const game = useGame();
 
     return (
-        <div
-            className={classes.board}
-            style={{ pointerEvents: isMyTurn ? 'all' : 'none' }}
-        >
-            {board?.map((row) =>
-                row.map((cell) => (
-                    <Cell
-                        grabCell={game.grabCell}
-                        cell={cell}
-                        key={(cell.position.x + cell.position.y).toString()}
-                    />
-                ))
-            )}
+        <div className={classes.board}>
+            <div
+                className={classes.cellsWrapper}
+                style={{
+                    pointerEvents: isMyTurn ? 'all' : 'none',
+                    filter: `grayscale(${isMyTurn ? 0 : 0.5})`,
+                }}
+            >
+                {board?.map((row) =>
+                    row.map((cell) => (
+                        <Cell
+                            grabCell={game.grabCell}
+                            cell={cell}
+                            key={(cell.position.x + cell.position.y).toString()}
+                        />
+                    ))
+                )}
+            </div>
         </div>
     );
 };
