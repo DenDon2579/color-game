@@ -6,5 +6,5 @@ export interface IPlayerInfo {
     color: string;
     playerCode: number;
     userID: string;
-    ownedCells: ICellInfo[];
+    ownedCellsCount: number;
 }

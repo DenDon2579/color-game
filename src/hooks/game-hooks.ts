@@ -50,7 +50,9 @@ export const useGame = () => {
                 if (cellsCount < 1) {
                     nextTurn();
                 }
+
                 setServerGameInfo(game.getInfo());
+                setServerPlayersInfo(game.getPlayersInfo());
             }
         },
 

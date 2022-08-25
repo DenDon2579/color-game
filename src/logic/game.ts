@@ -18,6 +18,7 @@ export class Game {
             isPlaying: false,
             turn: '',
             cellsCount: 0,
+            turnsCount: 0,
         };
         this.board = null;
         this.players = [];
@@ -28,6 +29,7 @@ export class Game {
             isPlaying: true,
             turn: 0,
             cellsCount: this.getRandomCellsCount(),
+            turnsCount: 1,
         };
     }
 
@@ -49,6 +51,7 @@ export class Game {
                         movingPlayerInfo.playerCode)
             ) {
                 this.board?.grabCell(movingPlayerInfo, position);
+                this.setPlayersCellsCount();
                 this.info.cellsCount--;
                 return true;
             }
@@ -95,6 +98,7 @@ export class Game {
                 this.info.turn = 0;
             }
             this.info.cellsCount = this.getRandomCellsCount();
+            this.info.turnsCount += 1;
         }
     }
 
@@ -108,7 +112,7 @@ export class Game {
                     color: COLORS[index],
                     playerCode: index,
                     userID: player.userID,
-                    ownedCells: [],
+                    ownedCellsCount: 1,
                 };
                 this.players.push(new Player(playerInfo));
             }
@@ -119,21 +123,27 @@ export class Game {
         this.board = new Board(this.getPlayersInfo());
     }
 
-    // setPlayerBases() {
-    //     this.players.map((player, index) => {
-    //         const { x, y } = BASES_CORDS[index];
-    //         if (this.board) {
-    //             player.info = {
-    //                 ...player.info,
-    //                 ownedCells: [this.board.getInfo()[y][x]],
-    //             };
-    //         }
-    //     });
-    // }
     getRandomCellsCount(): number {
         const min = 1;
         const max = 5;
         const rand = min + Math.random() * (max + 1 - min);
         return Math.floor(rand);
+    }
+
+    setPlayersCellsCount() {
+        const board = this.board?.getInfo().flat();
+
+        if (board) {
+            this.getPlayersInfo().forEach((player) => {
+                const cellsCount = board.reduce((acc: number, item): number => {
+                    if (item.ownerCode === player.playerCode) {
+                        return ++acc;
+                    }
+                    return acc;
+                }, 0);
+                this.players[player.playerCode].info.ownedCellsCount =
+                    cellsCount;
+            });
+        }
     }
 }

@@ -41,13 +41,14 @@ const Game: React.FC = () => {
 
     useEffect(() => {
         if (!gameLoading && serverGame) {
-            const [cellsCount, isPlaying, turn] = serverGame.map((i) =>
-                i.val()
+            const [cellsCount, isPlaying, turn, turnsCount] = serverGame.map(
+                (i) => i.val()
             );
             const gameInfo: IGameInfo = {
                 cellsCount,
                 isPlaying,
                 turn,
+                turnsCount,
             };
             game.setClientGameInfo(gameInfo);
         }
@@ -83,9 +84,34 @@ const Game: React.FC = () => {
                         <span>
                             Осталось ячеек: {gameState.game?.cellsCount}
                         </span>
+
+                        <span>Ход: {gameState.game?.turnsCount} из 50</span>
                     </div>
                     <Board />
-                    <div className={classes.playersInfo}></div>
+                    <div className={classes.playersInfo}>
+                        {gameState.players.map((player) => (
+                            <div className={classes.stats} key={player.userID}>
+                                <div
+                                    className={classes.statsCell}
+                                    style={{ backgroundColor: player.color }}
+                                >
+                                    <img
+                                        src={
+                                            player.photoURL
+                                                ? player.photoURL
+                                                : ''
+                                        }
+                                        alt=''
+                                    />
+                                </div>
+
+                                <span>
+                                    {player.displayName}:{' '}
+                                    {player.ownedCellsCount}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
                 </>
             ) : (
                 <div className={classes.preGameMessage}>

@@ -12,6 +12,6 @@ export class Player {
     }
 
     setInfo(playerInfo: IPlayerInfo) {
-        this.info = playerInfo;
+        this.info = { ...playerInfo };
     }
 }

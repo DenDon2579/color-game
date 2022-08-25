@@ -18,6 +18,10 @@
     .playersInfo {
         width: 20%;
         height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 }
 
@@ -57,5 +61,31 @@ span {
         text-align: center;
         color: #a8aae7;
         font-size: 25px;
+    }
+}
+
+.stats {
+    width: 80%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 5px 0;
+    .statsCell {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 10px;
+        border: 2px solid #a8aae7;
+        img {
+            margin: 10px;
+            width: 30px;
+            border-radius: 50%;
+        }
+    }
+    span {
+        margin-left: 20px;
+        text-align: center;
+        color: #a8aae7;
+        font-size: 18px;
     }
 }
