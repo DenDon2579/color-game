@@ -10,7 +10,7 @@ export const useLobby = () => {
     const user = useAppSelector((state) => state.userReducer.info);
     const dispatch = useAppDispatch();
 
-    const methods = {
+    return {
         join() {
             if (user && lobby) {
                 const tempLobby = [...lobby] as TLobby;
@@ -72,8 +72,10 @@ export const useLobby = () => {
                 dispatch(setReadyStatus(tempLobby[userIndex].isReady));
             });
         },
+        reset() {
+            setServerLobby(['', '', '', '']);
+        },
     };
-    return methods;
 };
 
 const setServerLobby = (lobby: TLobby) => {

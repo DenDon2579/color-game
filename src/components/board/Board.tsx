@@ -9,8 +9,12 @@ import classes from './Board.module.scss';
 interface IProps {}
 
 const Board: React.FC<IProps> = () => {
+    const game = useGame();
     const board = useAppSelector((state) => state.gameReducer.board);
     const turn = useAppSelector((state) => state.gameReducer.game?.turn);
+    const playersCodes = useAppSelector(
+        (state) => state.gameReducer.game?.playersCodes
+    );
     const players = useAppSelector((state) => state.gameReducer.players);
     const currentUserID = useAppSelector(
         (state) => state.userReducer.info?.userID
@@ -18,9 +22,9 @@ const Board: React.FC<IProps> = () => {
     const myCode = players.find(
         (player) => player.userID === currentUserID
     )?.playerCode;
-    const isMyTurn = myCode === turn;
+    console.log(game.getMovingPlayerCode());
 
-    const game = useGame();
+    const isMyTurn = myCode === game.getMovingPlayerCode();
 
     return (
         <div className={classes.board}>

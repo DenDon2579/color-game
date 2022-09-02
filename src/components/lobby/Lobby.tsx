@@ -14,13 +14,15 @@ import { useLobby } from '../../hooks/lobby-hooks';
 import lobbyReducer, { setClientLobby } from '../../store/lobbyReducer';
 import { useDispatch } from 'react-redux';
 import { useGame } from '../../hooks/game-hooks';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCirclePlay } from '@fortawesome/free-regular-svg-icons';
 
 const Lobby: React.FC = (props) => {
     const dispatch = useDispatch();
     const user = useAppSelector((state) => state.userReducer.info);
     const usersInLobby = useAppSelector((state) => state.lobbyReducer.lobby);
-    const isGameStarted = useAppSelector(
-        (state) => state.gameReducer.game?.isPlaying
+    const gameStatus = useAppSelector(
+        (state) => state.gameReducer.game?.status
     );
     const lobby = useLobby();
 
@@ -52,7 +54,7 @@ const Lobby: React.FC = (props) => {
         return false;
     };
 
-    if (!isGameStarted) {
+    if (gameStatus !== 'playing') {
         return (
             <div className={classes.lobby}>
                 <div className={classes.header}>
@@ -76,18 +78,22 @@ const Lobby: React.FC = (props) => {
                     </>
                 ) : (
                     <button className={classes.button} onClick={joinLobby}>
-                        Присоединиться к лобби
+                        Присоединиться к лобби{' '}
+                        <FontAwesomeIcon
+                            className={classes.icon}
+                            icon={faCirclePlay}
+                        />
                     </button>
                 )}
                 {isAllReady() && <Navigate to='../game' />}
-                {/* <button
+                <button
                     className={classes.button}
                     onClick={() =>
                         set(ref(database, 'lobby'), ['', '', '', ''])
                     }
                 >
-                    Remove all
-                </button> */}
+                    Очистить лобби
+                </button>
             </div>
         );
     } else {

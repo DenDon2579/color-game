@@ -1,4 +1,4 @@
-import { ICellInfo } from '../types/cell';
+import { ICellInfo, IPosition } from '../types/cell';
 import { IPlayerInfo } from '../types/player';
 
 export class Cell {
@@ -10,6 +10,16 @@ export class Cell {
 
     setInfo(cellInfo: ICellInfo) {
         this.info = { ...cellInfo };
+    }
+
+    isEnemyCell(currentPlayerCode: number) {
+        if (
+            this.info.ownerCode !== '' &&
+            this.info.ownerCode !== currentPlayerCode
+        ) {
+            return true;
+        }
+        return false;
     }
 
     setAsPlayerBase(ownerCode: number, photoURL: string | null, color: string) {

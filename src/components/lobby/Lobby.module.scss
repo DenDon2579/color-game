@@ -33,14 +33,18 @@
     margin: 12px 0;
     font-size: 18px;
     border-radius: 20px;
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-
     color: #a8aae7;
-
     background: #1a1a40;
     box-shadow: 11px 11px 22px #171739, -11px -11px 22px #1d1d47;
     transition: all 0.3s;
+
+    .icon {
+        margin-left: 15px;
+    }
 }
 
 .button:hover {

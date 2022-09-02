@@ -1,4 +1,11 @@
-import { BASES_CORDS, COLORS } from '../constants';
+import { isThisTypeNode } from 'typescript';
+import {
+    BASES_CORDS,
+    COLORS,
+    TOTAL_TURNS,
+    VULNERABLE_CORDS,
+} from '../constants';
+import gameReducer from '../store/gameReducer';
 import { IBoardInfo } from '../types/board';
 import { ICellInfo, IPosition } from '../types/cell';
 import { IGameInfo } from '../types/game';
@@ -15,10 +22,23 @@ export class Game {
 
     constructor() {
         this.info = {
-            isPlaying: false,
+            status: 'notPlaying',
             turn: '',
             cellsCount: 0,
             turnsCount: 0,
+            playersCodes: [],
+        };
+        this.board = null;
+        this.players = [];
+    }
+
+    init() {
+        this.info = {
+            status: 'notPlaying',
+            turn: '',
+            cellsCount: 0,
+            turnsCount: 0,
+            playersCodes: [],
         };
         this.board = null;
         this.players = [];
@@ -26,17 +46,22 @@ export class Game {
 
     start() {
         this.info = {
-            isPlaying: true,
+            ...this.info,
+            status: 'playing',
             turn: 0,
             cellsCount: this.getRandomCellsCount(),
             turnsCount: 1,
         };
     }
+    getPlayerCode(turn: number): number {
+        return this.info.playersCodes[turn];
+    }
 
     grabCell(position: IPosition): boolean {
         const { x, y } = position;
         if (this.info.turn !== '') {
-            const movingPlayerInfo = this.players[this.info.turn].getInfo();
+            const playerCode = this.getPlayerCode(this.info.turn);
+            const movingPlayerInfo = this.players[playerCode].getInfo();
             const cells = this.board?.getInfo();
             if (
                 cells?.[y]?.[x]?.changeable &&
@@ -64,8 +89,9 @@ export class Game {
     }
 
     setPlayersInfo(playersInfo: IPlayerInfo[]) {
-        playersInfo.forEach((playerInfo, index) =>
-            this.players[index].setInfo(playerInfo)
+        playersInfo.forEach(
+            (playerInfo, index) =>
+                this.players[index] && this.players[index].setInfo(playerInfo)
         );
     }
 
@@ -90,20 +116,66 @@ export class Game {
 
     nextTurn() {
         if (this.info.turn !== '') {
-            const playerCount = this.players.length;
+            const playersCount = this.info.playersCodes.length;
 
-            if (this.info.turn < playerCount - 1) {
+            if (this.info.turn < playersCount - 1) {
                 this.info.turn += 1;
             } else {
                 this.info.turn = 0;
             }
+
             this.info.cellsCount = this.getRandomCellsCount();
-            this.info.turnsCount += 1;
+            if (this.info.turn === 0) {
+                this.info.turnsCount += 1;
+            }
         }
+    }
+
+    hurtPlayer(turn: number) {
+        const playerCode = this.getPlayerCode(turn);
+        const newHp = this.players[playerCode].hurt();
+        if (newHp === 0) {
+            this.killPlayer(playerCode);
+        }
+    }
+
+    killPlayer(turn: number) {
+        const playerCode = this.getPlayerCode(turn);
+        this.players[playerCode].kill();
+        this.info.playersCodes = this.info.playersCodes.filter(
+            (code) => code !== playerCode
+        );
+        this.board?.clearDeathPlayerCells(playerCode);
+        if (this.info.playersCodes.length < 2) {
+            this.finish();
+        } else {
+            this.nextTurn();
+        }
+    }
+
+    isBaseCaptured(turn: number) {
+        const playerCode = this.getPlayerCode(turn);
+        const vulnerableCords = VULNERABLE_CORDS[playerCode];
+        const checkResult = vulnerableCords.map((cell) =>
+            this.board?.cells[cell.y][cell.x].isEnemyCell(playerCode)
+        );
+        return !checkResult.includes(false);
+    }
+
+    finish() {
+        this.board = null;
+        this.info = {
+            status: 'finished',
+            turn: '',
+            cellsCount: 0,
+            turnsCount: 0,
+            playersCodes: [],
+        };
     }
 
     createPlayers(lobby: TLobby) {
         const players = lobby.filter((player) => player !== '');
+        this.info.playersCodes = players.map((_, code) => code);
         players.forEach((player, index) => {
             if (player) {
                 const playerInfo: IPlayerInfo = {
@@ -113,6 +185,8 @@ export class Game {
                     playerCode: index,
                     userID: player.userID,
                     ownedCellsCount: 1,
+                    isAlive: true,
+                    hp: 3,
                 };
                 this.players.push(new Player(playerInfo));
             }

@@ -14,4 +14,16 @@ export class Player {
     setInfo(playerInfo: IPlayerInfo) {
         this.info = { ...playerInfo };
     }
+
+    hurt() {
+        if (this.info.hp) {
+            this.info.hp--;
+        }
+        return this.info.hp;
+    }
+
+    kill() {
+        this.info.isAlive = false;
+        this.info.ownedCellsCount = 0;
+    }
 }

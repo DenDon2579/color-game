@@ -1,5 +1,6 @@
 import { ref, set } from 'firebase/database';
 import { Timestamp } from 'firebase/firestore';
+import { TOTAL_TURNS } from '../constants';
 import { database } from '../firestore';
 import { Game } from '../logic/game';
 import {
@@ -7,26 +8,32 @@ import {
     setClientGame,
     setClientPlayers,
 } from '../store/gameReducer';
-import { setHost } from '../store/userReducer';
+import { setClientLobby } from '../store/lobbyReducer';
+import {
+    setHost,
+    setIsInLobbyStatus,
+    setReadyStatus,
+} from '../store/userReducer';
 import { IBoardInfo } from '../types/board';
 import { IPosition } from '../types/cell';
 import { IGameInfo } from '../types/game';
 import { IPlayerInfo } from '../types/player';
+import { useLobby } from './lobby-hooks';
 import { useAppDispatch, useAppSelector } from './react-redux';
 
 const game = new Game();
 
 export const useGame = () => {
     const dispatch = useAppDispatch();
-
-    const lobby = useAppSelector((state) => state.lobbyReducer.lobby);
+    const lobby = useLobby();
+    const lobbyState = useAppSelector((state) => state.lobbyReducer.lobby);
     const userID = useAppSelector((state) => state.userReducer.info?.userID);
 
     return {
         init() {
-            game.createPlayers(lobby);
+            game.init();
+            game.createPlayers(lobbyState);
             game.createBoard();
-
             if (game.getPlayersInfo()[0].userID === userID) {
                 dispatch(setHost(true));
                 setServerGameInfo(game.getInfo());
@@ -34,10 +41,13 @@ export const useGame = () => {
                 setServerBoardInfo(game.getBoardInfo());
             }
         },
+
         start() {
             game.start();
             setServerGameInfo(game.getInfo());
+            lobby.reset();
         },
+
         info() {
             return [game.getInfo(), game.getPlayersInfo(), game.getBoardInfo()];
         },
@@ -45,15 +55,29 @@ export const useGame = () => {
         grabCell(position: IPosition) {
             const isSuccessful = game.grabCell(position);
             if (isSuccessful) {
-                const cellsCount = game.getInfo().cellsCount;
-                setServerBoardInfo(game.getBoardInfo());
-                if (cellsCount < 1) {
-                    nextTurn();
-                }
+                const gameInfo = game.getInfo();
 
-                setServerGameInfo(game.getInfo());
+                setServerBoardInfo(game.getBoardInfo());
+                setServerGameInfo(gameInfo);
                 setServerPlayersInfo(game.getPlayersInfo());
+
+                if (gameInfo.cellsCount < 1) {
+                    nextTurn();
+                    checkBase();
+                    const turnsCount = gameInfo.turnsCount;
+                    if (turnsCount === TOTAL_TURNS) {
+                        finish();
+                    }
+                }
             }
+        },
+
+        getMovingPlayerCode(): number {
+            const turn = game.getInfo().turn;
+            if (turn !== '') {
+                return game.getPlayerCode(turn);
+            }
+            return -1;
         },
 
         setClientGameInfo(gameInfo: IGameInfo) {
@@ -80,12 +104,27 @@ const setServerPlayersInfo = (playersInfo: IPlayerInfo[]) => {
     set(ref(database, 'playersInfo'), playersInfo);
 };
 const setServerBoardInfo = (boardInfo: IBoardInfo | null) => {
-    if (boardInfo) {
-        set(ref(database, 'board'), boardInfo);
-    }
+    set(ref(database, 'board'), boardInfo);
+};
+
+const finish = () => {
+    game.finish();
+    setServerGameInfo(game.getInfo());
+    setServerBoardInfo(game.getBoardInfo());
 };
 
 const nextTurn = () => {
     game.nextTurn();
     setServerGameInfo(game.getInfo());
+};
+
+const checkBase = () => {
+    const currentTurn = game.getInfo().turn;
+    if (currentTurn !== '') {
+        game.isBaseCaptured(currentTurn) && game.hurtPlayer(currentTurn);
+    }
+
+    setServerGameInfo(game.getInfo());
+    setServerBoardInfo(game.getBoardInfo());
+    setServerPlayersInfo(game.getPlayersInfo());
 };

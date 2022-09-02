@@ -1,5 +1,5 @@
 export interface ICellInfo {
-    ownerCode: number | null;
+    ownerCode: number | '';
     photoURL: string | null;
     changeable: boolean;
     color: string | null;

@@ -31,7 +31,7 @@ export class Board {
 
     createCell(x: number, y: number) {
         const cell: ICellInfo = {
-            ownerCode: null,
+            ownerCode: '',
             photoURL: null,
             changeable: true,
             color: null,
@@ -60,5 +60,24 @@ export class Board {
                 player.color
             );
         });
+    }
+
+    clearDeathPlayerCells(playerCode: number) {
+        this.setInfo(
+            this.cells.map((row) =>
+                row.map((cell) => {
+                    if (cell.info.ownerCode === playerCode) {
+                        return {
+                            ...cell.info,
+                            ownerCode: '',
+                            photoURL: null,
+                            changeable: true,
+                            color: null,
+                        };
+                    }
+                    return cell.info;
+                })
+            )
+        );
     }
 }

@@ -1,9 +1,12 @@
-import { ref } from 'firebase/database';
-import React, { useEffect } from 'react';
+import { ref, set } from 'firebase/database';
+import React, { useEffect, useState } from 'react';
 import { useList } from 'react-firebase-hooks/database';
+import { Link } from 'react-router-dom';
+import { TOTAL_TURNS } from '../../constants';
 
 import { database } from '../../firestore';
 import { useGame } from '../../hooks/game-hooks';
+import { useLobby } from '../../hooks/lobby-hooks';
 import { useAppDispatch, useAppSelector } from '../../hooks/react-redux';
 
 import {
@@ -17,12 +20,15 @@ import { IPlayerInfo } from '../../types/player';
 
 import Board from '../board/Board';
 import classes from './Game.module.scss';
+import GameOver from './gameOver/GameOver';
+import PlayersStats from './playersStats/PlayersStats';
 
 const Game: React.FC = () => {
     const isHost = useAppSelector((state) => state.userReducer.isHost);
-    const isPlaying = useAppSelector(
-        (state) => state.gameReducer.game?.isPlaying
+    const gameStatus = useAppSelector(
+        (state) => state.gameReducer.game?.status
     );
+    const lobby = useLobby();
     const gameState = useAppSelector((state) => state.gameReducer);
     const dispatch = useAppDispatch();
     const game = useGame();
@@ -31,6 +37,17 @@ const Game: React.FC = () => {
     const [serverPlayers, playersLoading] = useList(
         ref(database, 'playersInfo')
     );
+
+    const [movingPlayerName, setMovingPlayerName] = useState<string>('');
+
+    useEffect(() => {
+        const movingPlayerCode = game.getMovingPlayerCode();
+        if (movingPlayerCode !== -1) {
+            setMovingPlayerName(
+                gameState.players[movingPlayerCode]?.displayName
+            );
+        }
+    }, [gameState]);
 
     useEffect(() => {
         if (!boardLoading) {
@@ -41,12 +58,12 @@ const Game: React.FC = () => {
 
     useEffect(() => {
         if (!gameLoading && serverGame) {
-            const [cellsCount, isPlaying, turn, turnsCount] = serverGame.map(
-                (i) => i.val()
-            );
+            const [cellsCount, playersCodes, status, turn, turnsCount] =
+                serverGame.map((i) => i.val());
             const gameInfo: IGameInfo = {
                 cellsCount,
-                isPlaying,
+                playersCodes,
+                status,
                 turn,
                 turnsCount,
             };
@@ -62,58 +79,31 @@ const Game: React.FC = () => {
     }, [serverPlayers, dispatch, playersLoading]);
 
     useEffect(() => {
-        if (!gameState.game?.isPlaying) {
+        if (gameState.game?.status !== 'playing') {
             game.init();
         }
     }, []);
 
     return (
         <div className={classes.game}>
-            {isPlaying ? (
+            {gameStatus === 'playing' ? (
                 <>
                     <div className={classes.gameInfo}>
-                        <span>
-                            {'Ходит: ' +
-                                gameState.players.find(
-                                    (player) =>
-                                        player.playerCode ===
-                                        gameState.game?.turn
-                                )?.displayName}
-                        </span>
-
+                        <span>{'Ходит: ' + movingPlayerName}</span>
                         <span>
                             Осталось ячеек: {gameState.game?.cellsCount}
                         </span>
 
-                        <span>Ход: {gameState.game?.turnsCount} из 50</span>
+                        <span>
+                            Ход: {gameState.game?.turnsCount} из {TOTAL_TURNS}
+                        </span>
                     </div>
                     <Board />
-                    <div className={classes.playersInfo}>
-                        {gameState.players.map((player) => (
-                            <div className={classes.stats} key={player.userID}>
-                                <div
-                                    className={classes.statsCell}
-                                    style={{ backgroundColor: player.color }}
-                                >
-                                    <img
-                                        src={
-                                            player.photoURL
-                                                ? player.photoURL
-                                                : ''
-                                        }
-                                        alt=''
-                                    />
-                                </div>
-
-                                <span>
-                                    {player.displayName}:{' '}
-                                    {player.ownedCellsCount}
-                                </span>
-                            </div>
-                        ))}
+                    <div className={classes.playersStats}>
+                        <PlayersStats players={gameState.players} />
                     </div>
                 </>
-            ) : (
+            ) : gameStatus === 'notPlaying' ? (
                 <div className={classes.preGameMessage}>
                     {isHost ? (
                         <>
@@ -132,6 +122,8 @@ const Game: React.FC = () => {
                         <span>Ожидание хоста</span>
                     )}
                 </div>
+            ) : (
+                <GameOver players={gameState.players} />
             )}
         </div>
     );

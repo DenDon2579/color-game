@@ -17,6 +17,7 @@
     flex-wrap: wrap;
     width: calc(80px * 10);
     height: calc(80px * 10);
+    transition: filter 0.5s;
 }
 
 @keyframes enter {
