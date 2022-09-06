@@ -1,6 +1,10 @@
 import { ref, set } from 'firebase/database';
 import { database } from '../firestore';
-import { setIsInLobbyStatus, setReadyStatus } from '../store/userReducer';
+import {
+    setHost,
+    setIsInLobbyStatus,
+    setReadyStatus,
+} from '../store/userReducer';
 import { TLobby } from '../types/lobby';
 import { IUser } from '../types/user';
 import { useAppDispatch, useAppSelector } from './react-redux';
@@ -22,6 +26,7 @@ export const useLobby = () => {
                     if (i) {
                         return i.userID === user.userID;
                     }
+                    return i;
                 });
 
                 if (emptyIndex !== -1 && isAlreadyInLobby === -1) {
@@ -41,6 +46,7 @@ export const useLobby = () => {
                     if (i) {
                         return i.userID === user.userID;
                     }
+                    return i;
                 });
 
                 if (userIndex !== -1) {
@@ -50,6 +56,7 @@ export const useLobby = () => {
                 setServerLobby(tempLobby).then(() => {
                     dispatch(setIsInLobbyStatus(false));
                     dispatch(setReadyStatus(false));
+                    dispatch(setHost(false));
                 });
             }
         },

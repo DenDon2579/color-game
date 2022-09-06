@@ -1,15 +1,7 @@
-import { isThisTypeNode } from 'typescript';
-import {
-    BASES_CORDS,
-    COLORS,
-    TOTAL_TURNS,
-    VULNERABLE_CORDS,
-} from '../constants';
-import gameReducer from '../store/gameReducer';
+import { COLORS, VULNERABLE_CORDS } from '../constants';
 import { IBoardInfo } from '../types/board';
 import { ICellInfo, IPosition } from '../types/cell';
 import { IGameInfo } from '../types/game';
-
 import { TLobby } from '../types/lobby';
 import { IPlayerInfo } from '../types/player';
 import { Board } from './Board';
@@ -26,6 +18,7 @@ export class Game {
             turn: '',
             cellsCount: 0,
             turnsCount: 0,
+            totalTurns: 0,
             playersCodes: [],
         };
         this.board = null;
@@ -38,17 +31,19 @@ export class Game {
             turn: '',
             cellsCount: 0,
             turnsCount: 0,
+            totalTurns: 0,
             playersCodes: [],
         };
         this.board = null;
         this.players = [];
     }
 
-    start() {
+    start(turns: number) {
         this.info = {
             ...this.info,
             status: 'playing',
             turn: 0,
+            totalTurns: turns,
             cellsCount: this.getRandomCellsCount(),
             turnsCount: 1,
         };
@@ -168,6 +163,7 @@ export class Game {
             status: 'finished',
             turn: '',
             cellsCount: 0,
+            totalTurns: 0,
             turnsCount: 0,
             playersCodes: [],
         };

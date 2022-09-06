@@ -1,24 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import classes from './Lobby.module.scss';
-
-import { IUser } from '../../types/user';
 import { useAppSelector } from '../../hooks/react-redux';
-import { ref, remove, set } from 'firebase/database';
-import { useList } from 'react-firebase-hooks/database';
-
+import { ref, set } from 'firebase/database';
 import PlayerList from './PlayerList';
-import { TLobby } from '../../types/lobby';
 import { Navigate } from 'react-router-dom';
 import { database } from '../../firestore';
 import { useLobby } from '../../hooks/lobby-hooks';
-import lobbyReducer, { setClientLobby } from '../../store/lobbyReducer';
-import { useDispatch } from 'react-redux';
-import { useGame } from '../../hooks/game-hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlay } from '@fortawesome/free-regular-svg-icons';
 
 const Lobby: React.FC = (props) => {
-    const dispatch = useDispatch();
     const user = useAppSelector((state) => state.userReducer.info);
     const usersInLobby = useAppSelector((state) => state.lobbyReducer.lobby);
     const gameStatus = useAppSelector(

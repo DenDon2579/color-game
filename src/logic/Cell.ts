@@ -1,4 +1,4 @@
-import { ICellInfo, IPosition } from '../types/cell';
+import { ICellInfo } from '../types/cell';
 import { IPlayerInfo } from '../types/player';
 
 export class Cell {

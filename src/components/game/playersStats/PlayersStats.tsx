@@ -1,8 +1,4 @@
-import {
-    faCrown,
-    faHeart as faSolidHeart,
-} from '@fortawesome/free-solid-svg-icons';
-import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
+import { faCrown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { IPlayerInfo } from '../../../types/player';

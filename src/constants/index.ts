@@ -30,4 +30,4 @@ export const VULNERABLE_CORDS = [
     ],
 ];
 
-export const TOTAL_TURNS = 30;
+export const TURNS_PRESETS = [25, 50, 75, 100];

@@ -1,20 +1,13 @@
 import React from 'react';
 import { useGame } from '../../hooks/game-hooks';
 import { useAppSelector } from '../../hooks/react-redux';
-import gameReducer from '../../store/gameReducer';
-
 import Cell from '../cell/Cell';
 import classes from './Board.module.scss';
 
-interface IProps {}
-
-const Board: React.FC<IProps> = () => {
+const Board: React.FC = () => {
     const game = useGame();
     const board = useAppSelector((state) => state.gameReducer.board);
-    const turn = useAppSelector((state) => state.gameReducer.game?.turn);
-    const playersCodes = useAppSelector(
-        (state) => state.gameReducer.game?.playersCodes
-    );
+
     const players = useAppSelector((state) => state.gameReducer.players);
     const currentUserID = useAppSelector(
         (state) => state.userReducer.info?.userID

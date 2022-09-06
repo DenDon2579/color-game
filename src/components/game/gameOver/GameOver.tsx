@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useLobby } from '../../../hooks/lobby-hooks';
 import { IPlayerInfo } from '../../../types/player';
 import PlayersStats from '../playersStats/PlayersStats';
@@ -13,19 +13,20 @@ const GameOver: React.FC<IProps> = (props) => {
     const lobby = useLobby();
     const navigate = useNavigate();
     return (
-        <>
+        <div className={classes.wrapper}>
             <h2>Игра окончена</h2>
             <PlayersStats players={props.players} />
 
-            <span
+            <button
+                className={classes.button}
                 onClick={() => {
                     lobby.leave();
                     navigate('../lobby');
                 }}
             >
-                Назад
-            </span>
-        </>
+                Вернуться в лобби
+            </button>
+        </div>
     );
 };
 export default GameOver;

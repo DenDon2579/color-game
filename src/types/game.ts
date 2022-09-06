@@ -1,7 +1,8 @@
 export interface IGameInfo {
-    status: 'notPlaying' | 'playing' | 'finished';
-    turn: number | '';
     cellsCount: number;
+    status: 'notPlaying' | 'playing' | 'finished';
+    totalTurns: number;
+    turn: number | '';
     turnsCount: number;
     playersCodes: number[];
 }

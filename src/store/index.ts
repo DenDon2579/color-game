@@ -9,6 +9,7 @@ const store = configureStore({
         lobbyReducer,
         userReducer,
     },
+    devTools: false,
 });
 
 export default store;

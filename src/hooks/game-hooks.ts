@@ -1,6 +1,4 @@
 import { ref, set } from 'firebase/database';
-import { Timestamp } from 'firebase/firestore';
-import { TOTAL_TURNS } from '../constants';
 import { database } from '../firestore';
 import { Game } from '../logic/game';
 import {
@@ -8,12 +6,7 @@ import {
     setClientGame,
     setClientPlayers,
 } from '../store/gameReducer';
-import { setClientLobby } from '../store/lobbyReducer';
-import {
-    setHost,
-    setIsInLobbyStatus,
-    setReadyStatus,
-} from '../store/userReducer';
+import { setHost } from '../store/userReducer';
 import { IBoardInfo } from '../types/board';
 import { IPosition } from '../types/cell';
 import { IGameInfo } from '../types/game';
@@ -42,14 +35,10 @@ export const useGame = () => {
             }
         },
 
-        start() {
-            game.start();
+        start(turns: number) {
+            game.start(turns);
             setServerGameInfo(game.getInfo());
             lobby.reset();
-        },
-
-        info() {
-            return [game.getInfo(), game.getPlayersInfo(), game.getBoardInfo()];
         },
 
         grabCell(position: IPosition) {
@@ -65,7 +54,8 @@ export const useGame = () => {
                     nextTurn();
                     checkBase();
                     const turnsCount = gameInfo.turnsCount;
-                    if (turnsCount === TOTAL_TURNS) {
+                    const totalTurns = gameInfo.totalTurns;
+                    if (turnsCount === totalTurns) {
                         finish();
                     }
                 }

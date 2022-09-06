@@ -1,4 +1,7 @@
 .icon {
     margin-left: 10px;
     color: #e64848;
+    &:first-child {
+        margin: 0;
+    }
 }

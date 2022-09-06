@@ -1,34 +1,23 @@
-import { ref, set } from 'firebase/database';
+import { ref } from 'firebase/database';
 import React, { useEffect, useState } from 'react';
 import { useList } from 'react-firebase-hooks/database';
-import { Link } from 'react-router-dom';
-import { TOTAL_TURNS } from '../../constants';
-
 import { database } from '../../firestore';
 import { useGame } from '../../hooks/game-hooks';
-import { useLobby } from '../../hooks/lobby-hooks';
 import { useAppDispatch, useAppSelector } from '../../hooks/react-redux';
-
-import {
-    setClientBoard,
-    setClientGame,
-    setClientPlayers,
-} from '../../store/gameReducer';
 import { IBoardInfo } from '../../types/board';
 import { IGameInfo } from '../../types/game';
 import { IPlayerInfo } from '../../types/player';
-
 import Board from '../board/Board';
 import classes from './Game.module.scss';
 import GameOver from './gameOver/GameOver';
 import PlayersStats from './playersStats/PlayersStats';
+import TurnsForm from './turnsForm/TurnsForm';
 
 const Game: React.FC = () => {
     const isHost = useAppSelector((state) => state.userReducer.isHost);
     const gameStatus = useAppSelector(
         (state) => state.gameReducer.game?.status
     );
-    const lobby = useLobby();
     const gameState = useAppSelector((state) => state.gameReducer);
     const dispatch = useAppDispatch();
     const game = useGame();
@@ -58,12 +47,19 @@ const Game: React.FC = () => {
 
     useEffect(() => {
         if (!gameLoading && serverGame) {
-            const [cellsCount, playersCodes, status, turn, turnsCount] =
-                serverGame.map((i) => i.val());
+            const [
+                cellsCount,
+                playersCodes,
+                status,
+                totalTurns,
+                turn,
+                turnsCount,
+            ] = serverGame.map((i) => i.val());
             const gameInfo: IGameInfo = {
                 cellsCount,
                 playersCodes,
                 status,
+                totalTurns,
                 turn,
                 turnsCount,
             };
@@ -95,7 +91,8 @@ const Game: React.FC = () => {
                         </span>
 
                         <span>
-                            Ход: {gameState.game?.turnsCount} из {TOTAL_TURNS}
+                            Ход: {gameState.game?.turnsCount} из{' '}
+                            {gameState.game?.totalTurns}
                         </span>
                     </div>
                     <Board />
@@ -109,14 +106,11 @@ const Game: React.FC = () => {
                         <>
                             <span>
                                 Вы хост этой игры.
-                                <br /> Начинайте как будете готовы.
+                                <br />
+                                Выберите количество ходов чтобы начать игру.
                             </span>
-                            <button
-                                className={classes.button}
-                                onClick={game.start}
-                            >
-                                Начать игру
-                            </button>
+
+                            <TurnsForm start={game.start} />
                         </>
                     ) : (
                         <span>Ожидание хоста</span>

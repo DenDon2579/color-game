@@ -17,6 +17,9 @@
         line-height: 35px;
     }
     .playersStats {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 20%;
         padding-left: 80px;
         height: 100%;
@@ -30,11 +33,8 @@
     margin-top: 20px;
     font-size: 18px;
     border-radius: 20px;
-
     cursor: pointer;
-
     color: #a8aae7;
-
     background: #1a1a40;
     box-shadow: 11px 11px 22px #171739, -11px -11px 22px #1d1d47;
     transition: all 0.3s;
@@ -54,6 +54,7 @@
     span {
         text-align: center;
         color: #a8aae7;
+        line-height: 37px;
         font-size: 25px;
     }
 }
