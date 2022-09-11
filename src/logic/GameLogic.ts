@@ -4,8 +4,8 @@ import { ICellInfo, IPosition } from '../types/cell';
 import { IGameInfo } from '../types/game';
 import { TLobby } from '../types/lobby';
 import { IPlayerInfo } from '../types/player';
-import { Board } from './Board';
-import { Player } from './Player';
+import { Board } from './BoardLogic';
+import { Player } from './PlayerLogic';
 
 export class Game {
     info: IGameInfo;
