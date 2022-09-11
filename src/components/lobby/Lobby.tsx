@@ -6,8 +6,8 @@ import PlayerList from './PlayerList';
 import { Navigate } from 'react-router-dom';
 import { database } from '../../firestore';
 import { useLobby } from '../../hooks/lobby-hooks';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlay } from '@fortawesome/free-regular-svg-icons';
+import Button from '../../ui/buttons/Button';
 
 const Lobby: React.FC = (props) => {
     const user = useAppSelector((state) => state.userReducer.info);
@@ -55,36 +55,26 @@ const Lobby: React.FC = (props) => {
 
                 {user?.isInLobby ? (
                     <>
-                        <button className={classes.button} onClick={leaveLobby}>
-                            Покинуть лобби
-                        </button>
-                        <button
-                            className={classes.button}
-                            onClick={toggleStatus}
-                        >
+                        <Button onClick={leaveLobby}>Покинуть лобби</Button>
+                        <Button onClick={toggleStatus}>
                             {user?.isReady
                                 ? 'Перестать готовиться'
                                 : 'Приготовиться'}
-                        </button>
+                        </Button>
                     </>
                 ) : (
-                    <button className={classes.button} onClick={joinLobby}>
-                        Присоединиться к лобби{' '}
-                        <FontAwesomeIcon
-                            className={classes.icon}
-                            icon={faCirclePlay}
-                        />
-                    </button>
+                    <Button onClick={joinLobby} icon={faCirclePlay}>
+                        Присоединиться к лобби
+                    </Button>
                 )}
                 {isAllReady() && <Navigate to='../game' />}
-                <button
-                    className={classes.button}
+                <Button
                     onClick={() =>
                         set(ref(database, 'lobby'), ['', '', '', ''])
                     }
                 >
                     Очистить лобби
-                </button>
+                </Button>
             </div>
         );
     } else {

@@ -1,0 +1,53 @@
+@import '/src/static/scss/variables';
+
+.button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    color: $secondaryColor;
+    background: $primaryColor;
+    box-shadow: 11px 11px 22px $primaryShadowFirst,
+        -11px -11px 22px $primaryShadowSecond;
+    transition: all 0.3s;
+
+    &:hover {
+        background: $hoverColor;
+        box-shadow: 0px 0px 10px $hoverShadowFirst,
+            0px 0px 15px $hoverShadowSecond;
+        color: $primaryColor;
+    }
+
+    .icon {
+        margin-left: 15px;
+    }
+}
+
+//SIZE
+
+.large {
+    padding: 20px;
+    font-size: 20px;
+}
+
+.medium {
+    padding: 15px;
+    font-size: 18px;
+}
+
+.small {
+    padding: 10px;
+    font-size: 16px;
+}
+
+//TYPE
+
+.normal {
+    border-radius: 20px;
+}
+
+.rounded {
+    border-radius: 50%;
+    min-width: 70px;
+    min-height: 70px;
+    padding: 0;
+}

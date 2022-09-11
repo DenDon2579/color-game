@@ -1,3 +1,5 @@
+@import '/src/static/scss/variables';
+
 .wrapper {
     width: 100%;
     height: auto;
@@ -11,8 +13,9 @@
     position: relative;
     padding: 10px;
     border-radius: 20px;
-    background: #1a1a40;
-    box-shadow: 11px 11px 22px #171739, -11px -11px 22px #1d1d47;
+    background: $primaryColor;
+    box-shadow: 11px 11px 22px $primaryShadowFirst,
+        -11px -11px 22px $primaryShadowSecond;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -28,7 +31,7 @@
         align-items: center;
 
         border-radius: 10px;
-        border: 2px solid #a8aae7;
+        border: 2px solid $secondaryColor;
         img {
             margin: 10px;
             width: 30px;
@@ -38,8 +41,9 @@
     }
     span {
         text-align: center;
-        color: #a8aae7;
+        color: $secondaryColor;
         font-size: 18px;
+        word-break: break-all;
     }
     .statsText {
         width: 50%;
@@ -53,7 +57,6 @@
             justify-content: center;
             align-items: center;
             width: 100%;
-            height: 50%;
         }
         .bottom {
             display: flex;
@@ -69,9 +72,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        color: #a8aae7;
+        color: $secondaryColor;
         font-size: 20px;
-        border-left: 1px solid #a8aae7;
+        border-left: 1px solid $secondaryColor;
     }
 }
 

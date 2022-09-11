@@ -1,10 +1,13 @@
+@import '/src/static/scss/variables';
+
 .board {
     width: auto;
     height: auto;
     padding: 30px;
     box-sizing: content-box;
     overflow: hidden;
-    box-shadow: inset 11px 11px 22px #161636, inset -11px -11px 22px #1e1e4a;
+    box-shadow: inset 11px 11px 22px $primaryShadowFirst,
+        inset -11px -11px 22px $primaryShadowSecond;
     border-radius: 20px;
     animation: enter 2s;
     overflow: auto;
@@ -26,6 +29,7 @@
     }
 
     100% {
-        box-shadow: inset 11px 11px 22px #161636, inset -11px -11px 22px #1e1e4a;
+        box-shadow: inset 11px 11px 22px $primaryShadowFirst,
+            inset -11px -11px 22px $primaryShadowSecond;
     }
 }

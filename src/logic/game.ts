@@ -1,11 +1,11 @@
-import { COLORS, VULNERABLE_CORDS } from '../constants';
+import { COLORS, VULNERABLE_CORDS } from '../static/constants';
 import { IBoardInfo } from '../types/board';
 import { ICellInfo, IPosition } from '../types/cell';
 import { IGameInfo } from '../types/game';
 import { TLobby } from '../types/lobby';
 import { IPlayerInfo } from '../types/player';
-import { Board } from './Board';
-import { Player } from './Player';
+import { Board } from './board';
+import { Player } from './player';
 
 export class Game {
     info: IGameInfo;

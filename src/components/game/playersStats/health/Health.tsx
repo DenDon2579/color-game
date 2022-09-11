@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { memo } from 'react';
 import { faHeart as faSolHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as faRegHeart } from '@fortawesome/free-regular-svg-icons';
 import classes from './Health.module.scss';
@@ -82,4 +82,4 @@ const Health: React.FC<IProps> = ({ hp }) => {
             return <></>;
     }
 };
-export default Health;
+export default memo(Health);

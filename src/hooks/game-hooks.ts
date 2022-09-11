@@ -1,4 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { ref, set } from 'firebase/database';
+import { useEffect } from 'react';
+import { useList } from 'react-firebase-hooks/database';
 import { database } from '../firestore';
 import { Game } from '../logic/game';
 import {
@@ -21,6 +24,41 @@ export const useGame = () => {
     const lobby = useLobby();
     const lobbyState = useAppSelector((state) => state.lobbyReducer.lobby);
     const userID = useAppSelector((state) => state.userReducer.info?.userID);
+
+    //LOCAL METHODS
+
+    const finish = () => {
+        game.finish();
+        setServerGameInfo(game.getInfo());
+        setServerBoardInfo(game.getBoardInfo());
+    };
+
+    const nextTurn = () => {
+        game.nextTurn();
+        setServerGameInfo(game.getInfo());
+    };
+
+    const checkBase = () => {
+        const currentTurn = game.getInfo().turn;
+
+        if (currentTurn !== '') {
+            game.isBaseCaptured(currentTurn) && game.hurtPlayer(currentTurn);
+        }
+        setServerGameInfo(game.getInfo());
+        setServerBoardInfo(game.getBoardInfo());
+        setServerPlayersInfo(game.getPlayersInfo());
+    };
+
+    const setServerGameInfo = (gameInfo: IGameInfo) => {
+        set(ref(database, 'gameInfo'), gameInfo);
+    };
+    const setServerPlayersInfo = (playersInfo: IPlayerInfo[]) => {
+        set(ref(database, 'playersInfo'), playersInfo);
+    };
+    const setServerBoardInfo = (boardInfo: IBoardInfo | null) => {
+        set(ref(database, 'board'), boardInfo);
+    };
+    //HOOK METHODS
 
     return {
         init() {
@@ -87,34 +125,48 @@ export const useGame = () => {
     };
 };
 
-const setServerGameInfo = (gameInfo: IGameInfo) => {
-    set(ref(database, 'gameInfo'), gameInfo);
-};
-const setServerPlayersInfo = (playersInfo: IPlayerInfo[]) => {
-    set(ref(database, 'playersInfo'), playersInfo);
-};
-const setServerBoardInfo = (boardInfo: IBoardInfo | null) => {
-    set(ref(database, 'board'), boardInfo);
-};
+export const useGameSync = () => {
+    const dispatch = useAppDispatch();
+    const game = useGame();
+    const [serverBoard, boardLoading] = useList(ref(database, 'board'));
+    const [serverGame, gameLoading] = useList(ref(database, 'gameInfo'));
+    const [serverPlayers, playersLoading] = useList(
+        ref(database, 'playersInfo')
+    );
 
-const finish = () => {
-    game.finish();
-    setServerGameInfo(game.getInfo());
-    setServerBoardInfo(game.getBoardInfo());
-};
+    useEffect(() => {
+        if (!boardLoading) {
+            const board = serverBoard?.map((i) => i.val());
+            game.setClientBoardInfo(board as IBoardInfo);
+        }
+    }, [serverBoard, dispatch, boardLoading]);
 
-const nextTurn = () => {
-    game.nextTurn();
-    setServerGameInfo(game.getInfo());
-};
+    useEffect(() => {
+        if (!gameLoading && serverGame) {
+            const [
+                cellsCount,
+                playersCodes,
+                status,
+                totalTurns,
+                turn,
+                turnsCount,
+            ] = serverGame.map((i) => i.val());
+            const gameInfo: IGameInfo = {
+                cellsCount,
+                playersCodes,
+                status,
+                totalTurns,
+                turn,
+                turnsCount,
+            };
+            game.setClientGameInfo(gameInfo);
+        }
+    }, [serverGame, dispatch, gameLoading]);
 
-const checkBase = () => {
-    const currentTurn = game.getInfo().turn;
-    if (currentTurn !== '') {
-        game.isBaseCaptured(currentTurn) && game.hurtPlayer(currentTurn);
-    }
-
-    setServerGameInfo(game.getInfo());
-    setServerBoardInfo(game.getBoardInfo());
-    setServerPlayersInfo(game.getPlayersInfo());
+    useEffect(() => {
+        if (!playersLoading) {
+            const players = serverPlayers?.map((i) => i.val());
+            game.setClientPlayersInfo(players as IPlayerInfo[]);
+        }
+    }, [serverPlayers, dispatch, playersLoading]);
 };

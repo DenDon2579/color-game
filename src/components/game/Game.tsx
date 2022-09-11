@@ -1,12 +1,6 @@
-import { ref } from 'firebase/database';
 import React, { useEffect, useState } from 'react';
-import { useList } from 'react-firebase-hooks/database';
-import { database } from '../../firestore';
-import { useGame } from '../../hooks/game-hooks';
-import { useAppDispatch, useAppSelector } from '../../hooks/react-redux';
-import { IBoardInfo } from '../../types/board';
-import { IGameInfo } from '../../types/game';
-import { IPlayerInfo } from '../../types/player';
+import { useGame, useGameSync } from '../../hooks/game-hooks';
+import { useAppSelector } from '../../hooks/react-redux';
 import Board from '../board/Board';
 import classes from './Game.module.scss';
 import GameOver from './gameOver/GameOver';
@@ -18,14 +12,9 @@ const Game: React.FC = () => {
     const gameStatus = useAppSelector(
         (state) => state.gameReducer.game?.status
     );
+    useGameSync();
     const gameState = useAppSelector((state) => state.gameReducer);
-    const dispatch = useAppDispatch();
     const game = useGame();
-    const [serverBoard, boardLoading] = useList(ref(database, 'board'));
-    const [serverGame, gameLoading] = useList(ref(database, 'gameInfo'));
-    const [serverPlayers, playersLoading] = useList(
-        ref(database, 'playersInfo')
-    );
 
     const [movingPlayerName, setMovingPlayerName] = useState<string>('');
 
@@ -36,48 +25,13 @@ const Game: React.FC = () => {
                 gameState.players[movingPlayerCode]?.displayName
             );
         }
-    }, [gameState]);
-
-    useEffect(() => {
-        if (!boardLoading) {
-            const board = serverBoard?.map((i) => i.val());
-            game.setClientBoardInfo(board as IBoardInfo);
-        }
-    }, [serverBoard, dispatch, boardLoading]);
-
-    useEffect(() => {
-        if (!gameLoading && serverGame) {
-            const [
-                cellsCount,
-                playersCodes,
-                status,
-                totalTurns,
-                turn,
-                turnsCount,
-            ] = serverGame.map((i) => i.val());
-            const gameInfo: IGameInfo = {
-                cellsCount,
-                playersCodes,
-                status,
-                totalTurns,
-                turn,
-                turnsCount,
-            };
-            game.setClientGameInfo(gameInfo);
-        }
-    }, [serverGame, dispatch, gameLoading]);
-
-    useEffect(() => {
-        if (!playersLoading) {
-            const players = serverPlayers?.map((i) => i.val());
-            game.setClientPlayersInfo(players as IPlayerInfo[]);
-        }
-    }, [serverPlayers, dispatch, playersLoading]);
+    }, [gameState, game]);
 
     useEffect(() => {
         if (gameState.game?.status !== 'playing') {
             game.init();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

@@ -1,8 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ref, set } from 'firebase/database';
-import { database } from '../firestore';
 import { TLobby } from '../types/lobby';
-import { IUser } from '../types/user';
 
 interface IState {
     lobby: TLobby;

@@ -1,3 +1,5 @@
+@import '/src/static/scss/variables';
+
 .game {
     width: 100%;
     height: 100%;
@@ -12,7 +14,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        color: #a8aae7;
+        color: $secondaryColor;
         font-size: 20px;
         line-height: 35px;
     }
@@ -26,26 +28,6 @@
     }
 }
 
-.button {
-    border: none;
-    outline: none;
-    padding: 15px;
-    margin-top: 20px;
-    font-size: 18px;
-    border-radius: 20px;
-    cursor: pointer;
-    color: #a8aae7;
-    background: #1a1a40;
-    box-shadow: 11px 11px 22px #171739, -11px -11px 22px #1d1d47;
-    transition: all 0.3s;
-}
-
-.button:hover {
-    background: #ff5ec3;
-    box-shadow: 0px 0px 10px #d24a99, 0px 0px 15px #ff66d3;
-    color: #1a1a40;
-}
-
 .preGameMessage {
     display: flex;
     flex-direction: column;
@@ -53,7 +35,7 @@
     align-items: center;
     span {
         text-align: center;
-        color: #a8aae7;
+        color: $secondaryColor;
         line-height: 37px;
         font-size: 25px;
     }

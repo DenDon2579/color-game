@@ -1,10 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IBoardInfo } from '../types/board';
-import { TLobby } from '../types/lobby';
-import { IUser } from '../types/user';
-import { ref, set } from 'firebase/database';
-
-import { database } from '../firestore';
 import { IPlayerInfo } from '../types/player';
 import { IGameInfo } from '../types/game';
 

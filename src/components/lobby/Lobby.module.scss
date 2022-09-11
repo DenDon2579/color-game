@@ -1,54 +1,27 @@
+@import '/src/static/scss/variables';
+
 .lobby {
     padding: 0 20px 20px;
     width: 400px;
     height: auto;
-    // background-color: #270082;
     border-radius: 20px;
-
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     border-radius: 20px;
-    box-shadow: 11px 11px 22px #171739, -11px -11px 22px #1d1d47;
+    box-shadow: 11px 11px 22px $primaryShadowFirst,
+        -11px -11px 22px $primaryShadowSecond;
 }
 
 .header {
     margin: 15px 0;
-
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-bottom: 1px solid #a8aae7;
+    border-bottom: 1px solid $secondaryColor;
     span {
-        color: #a8aae7;
+        color: $secondaryColor;
         font-size: 28px;
     }
-}
-
-.button {
-    border: none;
-    outline: none;
-    padding: 15px;
-    margin: 12px 0;
-    font-size: 18px;
-    border-radius: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    color: #a8aae7;
-    background: #1a1a40;
-    box-shadow: 11px 11px 22px #171739, -11px -11px 22px #1d1d47;
-    transition: all 0.3s;
-
-    .icon {
-        margin-left: 15px;
-    }
-}
-
-.button:hover {
-    background: #ff5ec3;
-    box-shadow: 0px 0px 10px #d24a99, 0px 0px 15px #ff66d3;
-    color: #1a1a40;
 }

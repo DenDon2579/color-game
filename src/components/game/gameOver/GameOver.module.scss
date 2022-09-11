@@ -1,3 +1,5 @@
+@import '/src/static/scss/variables';
+
 .wrapper {
     width: 400px;
     height: 100%;
@@ -8,27 +10,8 @@
     h2 {
         font-size: 25px;
         text-align: center;
-        color: #a8aae7;
+        color: $secondaryColor;
         margin-bottom: 20px;
         font-weight: 400;
-    }
-}
-
-.button {
-    border: none;
-    outline: none;
-    padding: 15px;
-    margin-top: 40px;
-    font-size: 18px;
-    border-radius: 20px;
-    cursor: pointer;
-    color: #a8aae7;
-    background: #1a1a40;
-    box-shadow: 11px 11px 22px #171739, -11px -11px 22px #1d1d47;
-    transition: all 0.3s;
-    &:hover {
-        background: #ff5ec3;
-        box-shadow: 0px 0px 10px #d24a99, 0px 0px 15px #ff66d3;
-        color: #1a1a40;
     }
 }

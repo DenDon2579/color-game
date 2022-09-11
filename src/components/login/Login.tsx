@@ -2,8 +2,8 @@ import React from 'react';
 import { useAppDispatch } from '../../hooks/react-redux';
 import useAuth from '../../hooks/useAuth';
 import { signIn } from '../../store/userReducer';
-
-import classes from './Login.module.scss';
+import Button from '../../ui/buttons/Button';
+// import classes from './Login.module.scss';
 
 const Login: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -12,10 +12,10 @@ const Login: React.FC = () => {
         callLogin().then((user) => dispatch(signIn(user)));
     };
     return (
-        <div className={classes.wrapper}>
-            <button className={classes.loginButton} onClick={login}>
+        <div>
+            <Button size='large' onClick={login}>
                 Войти через гугил
-            </button>
+            </Button>
         </div>
     );
 };

@@ -1,7 +1,9 @@
+@import '/src/static/scss/variables';
+
 .content {
     width: 100%;
     height: 100%;
-    background-color: #1a1a40;
+    background-color: $primaryColor;
     display: flex;
     justify-content: center;
     align-items: center;

@@ -15,12 +15,14 @@ const Board: React.FC = () => {
     const myCode = players.find(
         (player) => player.userID === currentUserID
     )?.playerCode;
-    console.log(game.getMovingPlayerCode());
 
     const isMyTurn = myCode === game.getMovingPlayerCode();
 
     return (
-        <div className={classes.board}>
+        <div
+            className={classes.board}
+            style={{ cursor: isMyTurn ? '' : 'not-allowed' }}
+        >
             <div
                 className={classes.cellsWrapper}
                 style={{

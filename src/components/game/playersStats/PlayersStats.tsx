@@ -1,6 +1,6 @@
 import { faCrown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { memo } from 'react';
 import { IPlayerInfo } from '../../../types/player';
 import classes from './PlayersStats.module.scss';
 import Health from './health/Health';
@@ -60,4 +60,4 @@ const PlayersStats: React.FC<IProps> = (props) => {
         </div>
     );
 };
-export default PlayersStats;
+export default memo(PlayersStats);
