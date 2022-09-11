@@ -3,7 +3,7 @@ import { ref, set } from 'firebase/database';
 import { useEffect } from 'react';
 import { useList } from 'react-firebase-hooks/database';
 import { database } from '../firestore';
-import { Game } from '../logic/Game';
+import { Game } from '../Logic/Game';
 import {
     setClientBoard,
     setClientGame,
