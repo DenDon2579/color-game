@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent, useEffect, useState } from 'react';
 
 import { ICellInfo, IPosition } from '../../types/cell';
 import classes from './Cell.module.scss';
@@ -9,17 +9,27 @@ interface IProps {
 }
 
 const Cell: React.FC<IProps> = ({ cell, grabCell }) => {
-    const color = cell.color;
-    let style = {};
-    if (cell.color) {
-        style = {
-            background: color,
-            boxShadow: `0px 0px 5px ${color}, 0px 0px 5px ${color}`,
-        };
-    }
+    const [style, setStyle] = useState({});
+
+    useEffect(() => {
+        if (cell.color) {
+            setStyle({
+                cursor: 'pointer',
+                background: cell.color,
+                boxShadow: `0px 0px 5px ${cell.color}, 0px 0px 5px ${cell.color}`,
+            });
+        }
+    }, [cell.color]);
+
+    const grab = (e: MouseEvent) => {
+        if (e.buttons) {
+            grabCell(cell.position);
+        }
+    };
     return (
         <div
-            onClick={() => grabCell(cell.position)}
+            onMouseOver={grab}
+            onMouseDown={() => grabCell(cell.position)}
             className={classes.cell}
             style={style}
         >
