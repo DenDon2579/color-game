@@ -14,6 +14,7 @@ const Cell: React.FC<IProps> = ({ cell, grabCell }) => {
     if (cell.color) {
         style = {
             background: cell.color,
+            backgroundSize: 'cover',
             boxShadow: `0px 0px 5px ${cell.color}, 0px 0px 5px ${cell.color}`,
         };
     }
