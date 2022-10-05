@@ -10,7 +10,6 @@ interface IProps {
 
 const Cell: React.FC<IProps> = ({ cell, grabCell }) => {
     const [style, setStyle] = useState({});
-
     useEffect(() => {
         if (cell.color) {
             setStyle({
@@ -28,7 +27,7 @@ const Cell: React.FC<IProps> = ({ cell, grabCell }) => {
     };
     return (
         <div
-            onMouseOver={grab}
+            // onMouseOver={grab}
             onMouseDown={() => grabCell(cell.position)}
             className={classes.cell}
             style={style}
