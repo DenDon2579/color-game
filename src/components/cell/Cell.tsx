@@ -9,26 +9,17 @@ interface IProps {
 }
 
 const Cell: React.FC<IProps> = ({ cell, grabCell }) => {
-    const [style, setStyle] = useState({});
-    useEffect(() => {
-        if (cell.color) {
-            setStyle({
-                cursor: 'pointer',
-                background: cell.color,
-                boxShadow: `0px 0px 5px ${cell.color}, 0px 0px 5px ${cell.color}`,
-            });
-        }
-    }, [cell.color]);
-
-    const grab = (e: MouseEvent) => {
-        if (e.buttons) {
-            grabCell(cell.position);
-        }
-    };
+    const color = cell.color;
+    let style = {};
+    if (cell.color) {
+        style = {
+            background: color,
+            boxShadow: `0px 0px 10px ${color}, 0px 0px 15px ${color}`,
+        };
+    }
     return (
         <div
-            // onMouseOver={grab}
-            onMouseDown={() => grabCell(cell.position)}
+            onClick={() => grabCell(cell.position)}
             className={classes.cell}
             style={style}
         >
