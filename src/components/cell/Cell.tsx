@@ -13,8 +13,8 @@ const Cell: React.FC<IProps> = ({ cell, grabCell }) => {
     let style = {};
     if (cell.color) {
         style = {
-            background: color,
-            boxShadow: `0px 0px 10px ${color}, 0px 0px 15px ${color}`,
+            background: cell.color,
+            boxShadow: `0px 0px 5px ${cell.color}, 0px 0px 5px ${cell.color}`,
         };
     }
     return (
